@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Sound;
 
 class SoundController extends Controller
@@ -35,5 +36,17 @@ class SoundController extends Controller
         ]);
 
         return redirect('/sounds/create')->with('success', '音声の投稿に成功しました！');
+    }
+
+    public function destroy($id)
+    {
+        $sound = Sound::findOrFail($id);
+
+        if(Storage::disk('public')->exists($sound->file_path)) {
+            Storage::disk('public')->delete($sound->file_path);
+        }
+
+        $sound->delete();
+        return redirect('/')->with('success', '曲を削除しました。');
     }
 }
