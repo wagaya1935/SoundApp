@@ -3,9 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SoundController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [SoundController::class, 'index'])->name('sounds.index');
 
-Route::get('/sounds/create', [SoundController::class, 'create']); 
-Route::post('/sounds', [SoundController::class, 'store']);
+Route::get('/sounds/create', [SoundController::class, 'create'])->name('sounds.create');
+
+Route::post('/sounds', [SoundController::class, 'store'])->name('sounds.store');
+
+Route::get('/sounds/{id}', [SoundController::class, 'destroy'])->name('sounds.destroy');
