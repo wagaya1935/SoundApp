@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('sounds', function (Blueprint $table) {
             $table->id();
+            $table->string('title');      
+            $table->string('file_path');
             $table->timestamps();
         });
     }
