@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sound App</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/wavesurfer.js@7"></script>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans antialiased">
 
@@ -14,10 +15,31 @@
                 <div class="flex items-center">
                     <a href="/" class="text-xl font-bold text-indigo-600">Sound App</a>
                 </div>
-                <div class="flex items-center">
-                    <a href="{{ route('sounds.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
-                        ＋ 投稿する
+
+                <div class="flex items-center space-x-4">
+                    @auth
+                    {{-- ログイン中 --}}
+                    <span class="text-gray-700 text-sm">{{ Auth::user()->name }}さん</span>
+                    <a href="{{ route('sounds.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition">
+                        投稿する
                     </a>
+
+                    {{-- ログアウト --}}
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="text-gray-500 hover:text-gray-700 text-sm font-medium ml-2">
+                            ログアウト
+                        </button>
+                    </form>
+                    @else
+                    {{-- 未ログイン --}}
+                    <a href="{{ route('login') }}" class="text-gray-600 hover:text-indigo-600 font-medium text-sm">
+                        ログイン
+                    </a>
+                    <a href="{{ route('register') }}" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium transition">
+                        ユーザー登録
+                    </a>
+                    @endauth
                 </div>
             </div>
         </div>
