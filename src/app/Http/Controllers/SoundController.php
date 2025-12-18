@@ -54,11 +54,11 @@ class SoundController extends Controller
             }
         }
 
-        return redirect('/sounds/create')->with('success', '曲の投稿しました！');
+        return redirect('/sounds/create')->with('success', '投稿しました！');
     }
 
-    public function destroy($id)
-    {
+    public function destroy($id){
+
         $sound = Sound::findOrFail($id);
 
         if(Storage::disk('public')->exists($sound->file_path)) {
