@@ -10,11 +10,31 @@ use App\Models\Tag;
 class SoundController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $sounds = Sound::latest()->get();
+        $search = $request->input('search');
+        $query = Sound::query();
 
-        return view('sounds.index', ['sounds' => $sounds]);
+        if ($search) {
+            $spaceConversion = mb_convert_kana($search, 's');
+            $wordArraySearched = preg_split('/[\s,]+/', $spaceConversion, -1, PREG_SPLIT_NO_EMPTY);
+
+            foreach($wordArraySearched as $word) {
+                $query->where(function($q) use ($word) {
+                    $q->where('title', 'like', '%' . $word . '%')
+                      ->orWhereHas('tags', function($subQuery) use ($word) {
+                        $subQuery->where('name', 'like', '%' . $word . '%');
+                      });
+                });
+            }
+        }
+
+        $sounds = $query->with('tags')->latest()->get();
+
+        return view('sounds.index', [
+            'sounds' => $sounds,
+            'search' => $search
+        ]);
     }
 
     public function create()
