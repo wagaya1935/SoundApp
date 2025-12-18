@@ -5,6 +5,17 @@
         <h2 class="text-2xl font-bold text-gray-700">みんなの投稿一覧</h2>
     </div>
 
+    <div class="mb-8">
+        <form action="{{ route('sounds.index') }}" method="GET" class="flex gap-2">
+            <input type="text" name="search" value="{{ $search ?? '' }}"
+                   class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                   placeholder="キーワードや#タグで検索...">
+            <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 font-bold">
+                検索
+            </button>
+        </form>
+    </div>
+
     @if ($sounds->isEmpty())
         <div class="text-center py-20 bg-white rounded-lg shadow">
             <p class="text-gray-500 text-lg">まだ投稿がありません。</p>
@@ -30,6 +41,16 @@
                         <p class="text-xs text-gray-500 mb-4">
                             {{ $sound->created_at->format('Y/m/d H:i') }}
                         </p>
+
+                        {{-- タグの表示 --}}
+                        <div class="mt-2 mb-3 flex flex-wrap gap-2">
+                            @foreach($sound->tags as $tag)
+                                <a href="{{ route('sounds.index', ['search' => $tag->name]) }}"
+                                   class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full hover:bg-gray-300 transition">
+                                   {{ $tag->name }}
+                                </a>
+                            @endforeach
+                        </div>
 
                         {{-- 波形プレーヤーエリア --}}
                         <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
