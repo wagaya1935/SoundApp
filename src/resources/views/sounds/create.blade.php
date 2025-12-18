@@ -19,6 +19,12 @@
                     @enderror
                 </div>
 
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ハッシュタグ</label>
+                    <input type="text" name="tags" class="w-full border-gray-300 rounded-md shadow-sm border p-2" placeholder="例：初投稿 #ロック">
+                    <p class="text-xs text-gray-500 mt-1">スペースで区切って複数入力可能</p>
+                </div>
+
                 {{-- ファイル選択 --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">曲ファイル</label>
