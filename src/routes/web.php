@@ -21,6 +21,6 @@ Route::middleware('auth')->group(function () {
     
     Route::post('/sounds', [SoundController::class, 'store'])->name('sounds.store');
     
-    Route::get('/sounds/{id}', [SoundController::class, 'destroy'])->name('sounds.destroy');
+    Route::delete('/sounds/{id}', [SoundController::class, 'destroy'])->name('sounds.destroy');
 
 });
