@@ -21,6 +21,8 @@ Route::middleware('auth')->group(function () {
     
     Route::post('/sounds', [SoundController::class, 'store'])->name('sounds.store');
     
+    Route::post('/sounds/{id}/like', [SoundController::class, 'toggleLike'])->name('sounds.like');
+
     Route::delete('/sounds/{id}', [SoundController::class, 'destroy'])->name('sounds.destroy');
 
 });

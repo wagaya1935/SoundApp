@@ -45,4 +45,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function likes()
+    {
+        return $this->belongsToMany(Sound::class, 'likes', 'user_id', 'sound_id')->withTimestamps();
+    }
 }

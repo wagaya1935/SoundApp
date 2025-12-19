@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Sound;
 use App\Models\Tag;
 
@@ -75,6 +76,27 @@ class SoundController extends Controller
         }
 
         return redirect('/sounds/create')->with('success', '投稿しました！');
+    }
+
+    public function toggleLike($id)
+    {
+        $sound = Sound::findOrFail($id);
+        $user = Auth::user();
+
+        if($sound->isLikeBy($user)) {
+            $sound->likes()->detach($user->id);
+            $liked = false;
+        } else {
+            $sound->likes()->attach($user->id);
+            $liked = true;
+        }
+
+        $count = $sound->likes()->count();
+        return response()->json([
+            'liked' => $liked,
+            'count' => $count,
+        ]);
+        
     }
 
     public function destroy($id){
