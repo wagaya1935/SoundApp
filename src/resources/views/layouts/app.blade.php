@@ -6,8 +6,22 @@
     <title>Sound App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/wavesurfer.js@7"></script>
+    <style>
+        .animated-bg {
+            background: linear-gradient(-45deg, #d5f4fcff, #a1e0edff, #79e2f2ff, #65dedeff);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientAnimaiton {
+            0% {background-position: 0% 50%; }
+            50% {background-position: 100% 50%; }
+            100% {background-position: 0% 50%; }
+        }
+    </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans antialiased">
+<body class="animated-bg text-gray-800 font-sans antialiased">
 
     <nav class="bg-white shadow mb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
