@@ -17,7 +17,7 @@ class SoundController extends Controller
 
         if ($search) {
             $spaceConversion = mb_convert_kana($search, 's');
-            $wordArraySearched = preg_split('/[\s,]+/', $spaceConversion, -1, PREG_SPLIT_NO_EMPTY);
+            $wordArraySearched = preg_split('/[\s,]+/u', $spaceConversion, -1, PREG_SPLIT_NO_EMPTY);
 
             foreach($wordArraySearched as $word) {
                 $query->where(function($q) use ($word) {
