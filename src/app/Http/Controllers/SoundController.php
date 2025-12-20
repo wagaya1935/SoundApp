@@ -30,7 +30,7 @@ class SoundController extends Controller
             }
         }
 
-        $sounds = $query->with('tags')->latest()->get();
+        $sounds = $query->with('tags', 'user', 'likes')->latest()->get();
 
         return view('sounds.index', [
             'sounds' => $sounds,
@@ -56,11 +56,13 @@ class SoundController extends Controller
         $sound = Sound::create([
             'title' => $request->title,
             'file_path' => $path,
+            'user_id' => Auth::id(),
         ]);
 
         if ($request->tags) {
-            $tagNameArray = preg_split('/[\s ]+/u', $request->tags, -1, PREG_SPLIT_NO_EMPTY);
 
+            $spaceConversion = mb_convert_kana($request->tags, 's');
+            $tagNameArray = preg_split('/[\s ]+/u', $request->tags, -1, PREG_SPLIT_NO_EMPTY);
             $tagNameArray = array_unique($tagNameArray);
 
             foreach ($tagNameArray as $tagName) {
@@ -75,7 +77,7 @@ class SoundController extends Controller
             }
         }
 
-        return redirect('/sounds/create')->with('success', '投稿しました！');
+        return redirect()->route('sounds.index')->with('success', '投稿しました！');
     }
 
     public function toggleLike($id)
@@ -83,7 +85,7 @@ class SoundController extends Controller
         $sound = Sound::findOrFail($id);
         $user = Auth::user();
 
-        if($sound->isLikeBy($user)) {
+        if($sound->isLikedBy($user)) {
             $sound->likes()->detach($user->id);
             $liked = false;
         } else {
@@ -103,11 +105,19 @@ class SoundController extends Controller
 
         $sound = Sound::findOrFail($id);
 
-        if(Storage::disk('public')->exists($sound->file_path)) {
-            Storage::disk('public')->delete($sound->file_path);
+        if ($sound->user_id !== Auth::id()) {
+            abort(403, '権限がありません');
+        }
+
+        try{
+            if(Storage::disk('public')->exists($sound->file_path)) {
+                Storage::disk('public')->delete($sound->file_path);
+            }
+        } catch (\Exception $e) {
+            
         }
 
         $sound->delete();
-        return redirect('/')->with('success', '曲を削除しました。');
+        return redirect()->route('sounds.index')->with('success', '曲を削除しました。');
     }
 }
