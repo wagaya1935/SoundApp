@@ -10,8 +10,10 @@
             <input type="text" name="search" value="{{ $search ?? '' }}"
                    class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                    placeholder="キーワードや#タグで検索...">
-            <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 font-bold">
-                検索
+            <button type="submit" class="bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 transition flex items-center justify-center w-12">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
             </button>
         </form>
     </div>
@@ -27,8 +29,40 @@
                     <div class="p-5">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-lg font-bold text-gray-900 truncate">{{ $sound->title }}</h3>
+                            <p class="text-sm text-gray-600">
+                                投稿者 <span class="font-bold">
+                                    {{ $sound->user->name}}
+                                </span>
+                            </p>
+                            <div class="flex items-center gap-2">
+                                {{-- いいねボタン --}}
+                                @auth
+                                    {{-- ログインしている場合 --}}
+                                    <button onclick="toggleLike(this, '{{ $sound->id }}')"
+                                            class="flex items-center gap-1 text-sm font-medium transition hover:scale-110 focus:outline-none">
+
+                                            {{-- ハートアイコン --}}
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                 class="w-6 h-6 heart-icon {{ $sound->isLikedBy(Auth::user()) ? 'fill-red-500 text-red-500' : 'fill-none text-gray-400' }}">
+                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                            </svg>
+
+                                            {{-- いいね数 --}}
+                                            <span class="like-count text-gray-500">{{ $sound->likes->count() }}</span>
+                                    </button>
+                                @else
+                                    {{-- 未ログインの場合 --}}
+                                    <div class="flex items-center gap-1 text-gray-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                        </svg>
+                                        <span class="text-gray-500">{{ $sound->likes->count() }}</span>
+                                    </div>
+                                @endauth
+                            </div>
                             
                             {{-- 削除ボタン --}}
+                            @if(Auth::id() == $sound->user_id)
                             <form action="{{ route('sounds.destroy', $sound->id) }}" method="POST" onsubmit="return confirm('本当に削除しますか？');">
                                 @csrf
                                 @method('DELETE')
@@ -36,10 +70,11 @@
                                     削除
                                 </button>
                             </form>
+                            @endif
                         </div>
                         
                         <p class="text-xs text-gray-500 mb-4">
-                            {{ $sound->created_at->format('Y/m/d H:i') }}
+                            {{ $sound->created_at->timezone('Asia/Tokyo')->format('投稿日:Y/m/d H:i') }}
                         </p>
 
                         {{-- タグの表示 --}}
@@ -125,6 +160,40 @@
                             player.pause();
                         }
                     });
+                }
+            }
+
+            async function toggleLike(button, soundId) {
+                try {
+                    const response = await fetch(`/sounds/${soundId}/like`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}'  
+                        },
+                    });
+
+                    if (!response.ok) {
+                        alert('エラーが発生しました');
+                        return;
+                    }
+
+                    const data = await response.json();
+                    const icon = button.querySelector('.heart-icon');
+                    const countSpan = button.querySelector('.like-count');
+
+                    if (data.liked) {
+                        icon.classList.remove('fill-none', 'text-gray-400');
+                        icon.classList.add('fill-red-500', 'text-red-500');
+                    } else {
+                        icon.classList.remove('fill-red-500', 'text-red-500');
+                        icon.classList.add('fill-none', 'text-gray-400');
+                    }
+                   
+                    countSpan.textContent = data.count;
+
+                } catch (error) {
+                    console.error('Error:', error);
                 }
             }
         </script>
