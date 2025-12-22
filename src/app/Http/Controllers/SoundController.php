@@ -25,6 +25,9 @@ class SoundController extends Controller
                     $q->where('title', 'like', '%' . $word . '%')
                       ->orWhereHas('tags', function($subQuery) use ($word) {
                         $subQuery->where('name', 'like', '%' . $word . '%');
+                      })
+                      ->orWhereHas('user', function($subQuery) use ($word) {
+                        $subQuery->where('name', 'like', '%' . $word . '%');
                       });
                 });
             }
