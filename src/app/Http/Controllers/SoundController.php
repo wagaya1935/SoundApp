@@ -104,6 +104,12 @@ class SoundController extends Controller
         
     }
 
+    public function show($id)
+    {
+        $sound = Sound::with(['comments.user', 'tags', 'user'])->findOrFail($id);
+        return view('sounds.show', compact('sound'));
+    }
+
     public function destroy($id){
 
         $sound = Sound::findOrFail($id);
