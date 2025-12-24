@@ -82,7 +82,7 @@
             </div>
 
             <p class="text-xs text-gray-500 mb-4">
-                {{ $sound->created_at->timezone('Asia/Tokyo')->format('投稿日:Y/m/d H:i') }}
+                投稿日: {{ $sound->created_at->timezone('Asia/Tokyo')->format('Y/m/d H:i') }}
             </p>
 
             {{-- タグの表示 --}}
