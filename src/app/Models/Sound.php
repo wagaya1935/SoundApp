@@ -36,4 +36,9 @@ class Sound extends Model
     {
         return $user ? (bool)$this->likes->where('id', $user->id)->count() : false;
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->orderBy('created_at', 'desc');
+    }
 }
