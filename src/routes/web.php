@@ -3,8 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SoundController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 
 Route::get('/', [SoundController::class, 'index'])->name('sounds.index');
+
+Route::get('/sounds/{sound}', [SoundController::class, 'show'])->name('sounds.show');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
@@ -18,11 +21,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/sounds/create', [SoundController::class, 'create'])->name('sounds.create');
-    
+
     Route::post('/sounds', [SoundController::class, 'store'])->name('sounds.store');
-    
+
     Route::post('/sounds/{id}/like', [SoundController::class, 'toggleLike'])->name('sounds.like');
 
-    Route::delete('/sounds/{id}', [SoundController::class, 'destroy'])->name('sounds.destroy');
+    Route::post('/sounds/{sound}/comments', [CommentController::class, 'store'])->name('comments.store');
 
+    Route::delete('/sounds/{sound}/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    Route::delete('/sounds/{id}', [SoundController::class, 'destroy'])->name('sounds.destroy');
 });
