@@ -137,12 +137,12 @@
 
             // 3. 再生状態が変わった時にボタンのアイコンを変える
             wavesurfer.on('play', function() {
-                playBtn.textContent = '❚❚'; // 一時停止マーク
+                playBtn.textContent = '❚❚'; 
                 stopOtherPlayers(wavesurfer);
             });
 
             wavesurfer.on('pause', function() {
-                playBtn.textContent = '▶'; // 再生マーク
+                playBtn.textContent = '▶'; 
             });
 
             // 4. 再生終了時

@@ -69,7 +69,6 @@ class SoundController extends Controller
             $tagNameArray = array_unique($tagNameArray);
 
             foreach ($tagNameArray as $tagName) {
-                //　#が付いていなければ付ける
                 if (!str_starts_with($tagName, '#')) {
                     $tagName = '#' . $tagName;
                 }
