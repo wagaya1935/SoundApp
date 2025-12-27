@@ -7,8 +7,6 @@ use App\Http\Controllers\CommentController;
 
 Route::get('/', [SoundController::class, 'index'])->name('sounds.index');
 
-Route::get('/sounds/{sound}', [SoundController::class, 'show'])->name('sounds.show');
-
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
@@ -32,3 +30,5 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/sounds/{id}', [SoundController::class, 'destroy'])->name('sounds.destroy');
 });
+
+Route::get('/sounds/{sound}', [SoundController::class, 'show'])->name('sounds.show');
