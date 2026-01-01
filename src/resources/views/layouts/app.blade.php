@@ -45,6 +45,10 @@
                             ログアウト
                         </button>
                     </form>
+
+                    <a href="{{ route('profile.delete.confirm') }}" class="text-red-400 hover:text-red-600 font-medium ml-2">
+                        退会
+                    </a>
                     @else
                     {{-- 未ログイン --}}
                     <a href="{{ route('login') }}" class="text-gray-600 hover:text-indigo-600 font-medium text-sm">
