@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SoundController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', [SoundController::class, 'index'])->name('sounds.index');
 
@@ -17,6 +18,10 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('/profile/delete', [UserController::class, 'confirmDelete'])->name('profile.delete.confirm');
+
+    Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/sounds/create', [SoundController::class, 'create'])->name('sounds.create');
 
