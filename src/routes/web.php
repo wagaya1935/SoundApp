@@ -19,6 +19,10 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+    Route::get('/profile/edit', [UserController::class, 'edit'])->name('profile.edit');
+
+    Route::patch('/profile', [UserController::class, 'update'])->name('profile.update');
+
     Route::get('/profile/delete', [UserController::class, 'confirmDelete'])->name('profile.delete.confirm');
 
     Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy');
