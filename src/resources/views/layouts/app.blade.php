@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,12 +16,21 @@
         }
 
         @keyframes gradientAnimaiton {
-            0% {background-position: 0% 50%; }
-            50% {background-position: 100% 50%; }
-            100% {background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
     </style>
 </head>
+
 <body class="animated-bg text-gray-800 font-sans antialiased">
 
     <nav class="bg-white shadow mb-8">
@@ -33,7 +43,18 @@
                 <div class="flex items-center space-x-4">
                     @auth
                     {{-- ログイン中 --}}
-                    <span class="text-gray-700 text-sm">{{ Auth::user()->name }}さん</span>
+                    <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 hover:opacity-75 transition" title="プロフィールを編集">
+                        @if(Auth::user()->icon_path)
+                        <img src="{{ asset('storage/' . Auth::user()->icon_path) }}"
+                            alt="Avatar"
+                            class="w-8 h-8 rounded-full object-cover border border-gray-200">
+                        @else
+                        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs text-gray-600 font-bold">
+                            {{ substr(Auth::user()->name, 0, 1) }}
+                        </div>
+                        @endif
+                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}さん</span>
+                    </a>
                     <a href="{{ route('sounds.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition">
                         投稿する
                     </a>
@@ -65,9 +86,9 @@
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <span class="block sm:inline">{{ session('success') }}</span>
-            </div>
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ session('success') }}</span>
+        </div>
         @endif
 
         @yield('content')
@@ -78,4 +99,5 @@
     </footer>
 
 </body>
+
 </html>
