@@ -29,7 +29,7 @@
         <div class="p-5">
             <div class="flex justify-between items-start mb-2">
                 <h3 class="text-lg font-bold text-gray-900 truncate">{{ $sound->title }}</h3>
-                
+
                 <div class="flex items-center gap-2">
                     {{-- いいねボタン --}}
                     @auth
@@ -78,12 +78,12 @@
             </div>
 
             <p class="text-xs text-gray-500 mb-4">
-                <p class="mb-1">
+            <p class="mb-1">
                 投稿者: <span class="font-bold">{{ $sound->user->name }}</span>
-                </p>
-                <p>
-                    投稿日: {{ $sound->created_at->timezone('Asia/Tokyo')->format('Y/m/d H:i') }}
-                </p>
+            </p>
+            <p>
+                投稿日: {{ $sound->created_at->timezone('Asia/Tokyo')->format('Y/m/d H:i') }}
+            </p>
             </p>
 
             {{-- タグの表示 --}}
@@ -138,12 +138,12 @@
 
             // 3. 再生状態が変わった時にボタンのアイコンを変える
             wavesurfer.on('play', function() {
-                playBtn.textContent = '❚❚'; 
+                playBtn.textContent = '❚❚';
                 stopOtherPlayers(wavesurfer);
             });
 
             wavesurfer.on('pause', function() {
-                playBtn.textContent = '▶'; 
+                playBtn.textContent = '▶';
             });
 
             // 4. 再生終了時
