@@ -9,13 +9,13 @@
     <script src="https://unpkg.com/wavesurfer.js@7"></script>
     <style>
         .animated-bg {
-            background: linear-gradient(-45deg, #d5f4fcff, #a1e0edff, #79e2f2ff, #65dedeff);
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #111827, #000000);
             background-size: 400% 400%;
             animation: gradientAnimation 15s ease infinite;
             min-height: 100vh;
         }
 
-        @keyframes gradientAnimaiton {
+        @keyframes gradientAnimation {
             0% {
                 background-position: 0% 50%;
             }
@@ -33,11 +33,11 @@
 
 <body class="animated-bg text-gray-800 font-sans antialiased">
 
-    <nav class="bg-white shadow mb-8">
+    <nav class="bg-black/40 backdrop-blur-md shadow-lg mb-8 border-b border-white/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="/" class="text-xl font-bold text-indigo-600">Sound App</a>
+                    <a href="/" class="text-xl font-bold text-indigo-400">Sound App</a>
                 </div>
 
                 <div class="flex items-center space-x-4">
@@ -94,8 +94,8 @@
         @yield('content')
     </main>
 
-    <footer class="text-center text-gray-500 text-sm py-8 mt-8">
-        &copy; 2025 Sound App Portfolio.
+    <footer class="text-center text-gray-100 text-sm py-8 mt-8">
+        &copy; 2025-2026 Sound App Portfolio.
     </footer>
 
 </body>
