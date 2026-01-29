@@ -82,6 +82,37 @@ class SoundController extends Controller
         return redirect()->route('sounds.index')->with('success', '投稿しました！');
     }
 
+    public function edit(Sound $sound)
+    {
+        if ($sound->user_id !== Auth::id()) {
+            abort(403, '権限がありません。');
+        }
+
+        return view('sounds.edit', compact('sound'));
+    }
+
+    public function update(Request $request, Sound $sound)
+    {
+        if ($sound->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'title' => 'required|max:255',
+            'tags' => 'nullable|string',
+        ]);
+
+        $sound->title = $request->title;
+
+        if ($request->has('tags')) {
+            $sound->tags()->sync($tagIds);
+        }
+
+        $sound->save();
+
+        return redirect()->route('sounds.index')->with('success', '投稿を更新しました！');
+    }
+
     public function toggleLike($id)
     {
         $sound = Sound::findOrFail($id);
