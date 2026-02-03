@@ -13,9 +13,9 @@
             class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="キーワード・#タグ・名前で検索...">
         <button type="submit" class="bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 transition flex items-center justify-center w-12">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-            </svg>
+            <span class="material-symbols-outlined">
+                search
+            </span>
         </button>
     </form>
 </div>
@@ -48,31 +48,40 @@
                         <button onclick="toggleLike(this, '{{ $sound->id }}')"
                             class="flex items-center gap-1 text-sm font-medium transition hover:scale-110 focus:outline-none">
                             {{-- ハートアイコン --}}
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                class="w-6 h-6 heart-icon {{ $sound->isLikedBy(Auth::user()) ? 'fill-red-500 text-red-500' : 'fill-none text-gray-400' }}">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                            </svg>
-                            
-                            {{-- いいね数 --}}
-                            <span class="like-count text-gray-500">
+                            <span class="material-symbols-outlined heart-icon {{ $sound->isLikedBy(Auth::user()) ? 'text-red-500' : 'text-gray-400' }}"
+                                style="font-variation-settings: 'FILL' {{ $sound->isLikedBy(Auth::user()) ? 1 : 0 }}">
+                                favorite
+                            </span>
+                            <span class="like-count text-gray-400 text-sm">
                                 {{ $sound->likes->count() }}
                             </span>
                         </button>
+                        @else
+                        <div class="flex items-center gap-1 text-gray-400">
+                            <span class="material-symbols-outlined">
+                                favorite
+                            </span> 
+                            <span class="text-sm">
+                                {{ $sound->likes->count() }}
+                            </span>
+                        </div>
                         @endauth
                         
                         @if(Auth::id() == $sound->user_id)
                         <div class="relative z-10 flex items-center gap-2">
                             <a href="{{ route('sounds.edit', $sound->id) }}" class="text-indigo-400 hover:text-indigo-300 transition p-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                </svg>
+                                <span class="material-symbols-outlined">
+                                    edit
+                                </span>
                             </a>
                             {{-- 削除ボタン --}}
                             <form action="{{ route('sounds.destroy', $sound->id) }}" method="POST" onsubmit="return confirm('本当に削除しますか？');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-400 hover:text-red-600 text-xs border border-red-200 px-2 py-1 rounded">
-                                    削除
+                                    <span class="material-symbols-outlined">
+                                        delete
+                                    </span>
                                 </button>
                             </form>
                         </div>
@@ -103,7 +112,9 @@
                 <div class="relative z-10 bg-white/5 rounded-xl p-4 border border-white/5 flex items-center gap-4">
                     {{-- 再生/一時停止ボタン --}}
                     <button id="play-btn-{{ $sound->id }}" class="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0 transition">
-                        ▶
+                        <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1">
+                            play_arrow
+                        </span>
                     </button>
                     
                     {{-- 波形描画エリア --}}
@@ -130,25 +141,27 @@
 
                 // 2. ボタンを押した時の動作
                 const playBtn = document.getElementById('play-btn-{{ $sound->id }}');
+                const btnIcon = playBtn.querySelector('.material-symbols-outlined');
 
-                playBtn.addEventListener('click', function() {
+                playBtn.addEventListener('click', function(e) {
                     // 再生中なら一時停止、停止中なら再生
+                    e.preventDefault();
                     wavesurfer.playPause();
                 });
 
                 // 3. 再生状態が変わった時にボタンのアイコンを変える
                 wavesurfer.on('play', function() {
-                    playBtn.textContent = '❚❚';
+                    btnIcon.textContent = 'pause';
                     stopOtherPlayers(wavesurfer);
                 });
 
                 wavesurfer.on('pause', function() {
-                    playBtn.textContent = '▶';
+                    btnIcon.textContent = 'play_arrow';
                 });
 
                 // 4. 再生終了時
                 wavesurfer.on('finish', function() {
-                    playBtn.textContent = '▶';
+                    btnIcon.textContent = 'play_arrow';
                     wavesurfer.seekTo(0); // 最初に戻す
                 });
 
