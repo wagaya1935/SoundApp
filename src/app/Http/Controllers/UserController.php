@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use App\Models\User;
 
 class UserController extends Controller
@@ -40,6 +42,22 @@ class UserController extends Controller
 
         $user->save();
         return redirect()->route('profile.edit')->with('message', 'プロフィールを更新しました！');
+    }
+
+    public function updatepassword(Request $request)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'new_password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($request->new_password),
+        ]);
+
+        return back()->with('message', 'パスワードを更新しました！');
     }
 
     public function confirmDelete()
