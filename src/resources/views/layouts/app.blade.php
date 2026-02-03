@@ -7,6 +7,7 @@
     <title>Sound App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/wavesurfer.js@7"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
         .animated-bg {
             background: linear-gradient(-45deg, #0f172a, #1e293b, #111827, #000000);
@@ -49,11 +50,12 @@
                             alt="Avatar"
                             class="w-8 h-8 rounded-full object-cover border border-gray-200">
                         @else
-                        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs text-gray-600 font-bold">
-                            {{ substr(Auth::user()->name, 0, 1) }}
-                        </div>
+                        <span class="material-symbols-outlined text-gray-400 text-[32px]" 
+                            style="font-variation-settings: 'FILL' 1">
+                            account_circle
+                        </span>
                         @endif
-                        <span class="text-gray-700 text-sm">{{ Auth::user()->name }}さん</span>
+                        <span class="text-gray-300 text-sm">{{ Auth::user()->name }}さん</span>
                     </a>
                     <a href="{{ route('sounds.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition">
                         投稿する
@@ -62,14 +64,14 @@
                     {{-- ログアウト --}}
                     <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf
-                        <button type="submit" class="text-gray-500 hover:text-gray-700 text-sm font-medium ml-2">
+                        <button type="submit" class="text-gray-300 hover:text-gray-100 text-sm font-medium ml-2">
                             ログアウト
                         </button>
                     </form>
 
                     @else
                     {{-- 未ログイン --}}
-                    <a href="{{ route('login') }}" class="text-gray-600 hover:text-indigo-600 font-medium text-sm">
+                    <a href="{{ route('login') }}" class="text-gray-300 hover:text-indigo-600 font-medium text-sm">
                         ログイン
                     </a>
                     <a href="{{ route('register') }}" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium transition">
