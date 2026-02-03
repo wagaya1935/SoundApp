@@ -103,12 +103,27 @@ class SoundController extends Controller
         ]);
 
         $sound->title = $request->title;
+        $sound->save();
 
         if ($request->has('tags')) {
+            $tagNameArray = preg_split('/[\s ]+/u', $request->tags, -1, PREG_SPLIT_NO_EMPTY);
+            
+            $tagIds = [];
+            foreach ($tagNameArray as $tagName) {
+                $tagName = trim($tagName);
+                
+                if (!str_starts_with($tagName, '#')) {
+                    $tagName = '#' . $tagName;
+                }
+                
+                $tag = \App\Models\Tag::firstOrCreate(['name' => $tagName]);
+                $tagIds[] = $tag->id;
+            }
+                
             $sound->tags()->sync($tagIds);
+        } else {
+            $sound->tags()->detach();
         }
-
-        $sound->save();
 
         return redirect()->route('sounds.index')->with('success', '投稿を更新しました！');
     }
