@@ -22,6 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/edit', [UserController::class, 'edit'])->name('profile.edit');
 
     Route::patch('/profile', [UserController::class, 'update'])->name('profile.update');
+    
+    Route::patch('/profile/password', [UserController::class, 'updatepassword'])->name('profile.update.password');
 
     Route::get('/profile/delete', [UserController::class, 'confirmDelete'])->name('profile.delete.confirm');
 
@@ -31,13 +33,17 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/sounds', [SoundController::class, 'store'])->name('sounds.store');
 
-    Route::post('/sounds/{id}/like', [SoundController::class, 'toggleLike'])->name('sounds.like');
+    Route::get('/sounds/{sound}/edit', [SoundController::class, 'edit'])->name('sounds.edit');
+
+    Route::patch('/sounds/{sound}', [SoundController::class, 'update'])->name('sounds.update');
+
+    Route::post('/sounds/{sound}/like', [SoundController::class, 'toggleLike'])->name('sounds.like');
 
     Route::post('/sounds/{sound}/comments', [CommentController::class, 'store'])->name('comments.store');
 
     Route::delete('/sounds/{sound}/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
-    Route::delete('/sounds/{id}', [SoundController::class, 'destroy'])->name('sounds.destroy');
+    Route::delete('/sounds/{sound}', [SoundController::class, 'destroy'])->name('sounds.destroy');
 });
 
 Route::get('/sounds/{sound}', [SoundController::class, 'show'])->name('sounds.show');
