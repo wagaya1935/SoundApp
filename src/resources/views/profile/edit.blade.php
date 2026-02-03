@@ -31,10 +31,15 @@
 
         <div class="mb-6 text-center">
             @if($user->icon_path)
-                <img src="{{ asset('storage/' . $user->icon_path) }}" alt="Current Icon" class="w-24 h-24 rounded-full mx-auto object-cover border-2 border-white/10">
+                <img src="{{ asset('storage/' . $user->icon_path) }}" 
+                    alt="Current Icon" 
+                    class="w-24 h-24 rounded-full mx-auto object-cover border-2 border-white/10">
             @else
-                <div class="w-24 h-24 rounded-full mx-auto bg-gray-800 flex items-center justify-center text-gray-500 text-2xl">
-                    {{ substr($user->name, 0, 1) }}
+                <div class="flex justify-center">
+                    <span class="material-symbols-outlined text-gray-300 text-[96px]" 
+                        style="font-variation-settings: 'FILL' 1">
+                        account_circle
+                    </span>
                 </div>
             @endif
         </div>
@@ -54,12 +59,44 @@
             <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" class="w-full border-gray-300 rounded-md shadow-sm p-2 border" required>
         </div>
 
-        <div class="flex justify-between items-center">
-            <a href="{{ route('sounds.index') }}" class="text-gray-300 hover:text-white transition">キャンセル</a>
+        <div class="flex justify-end">
             <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 transition">
                 更新する
             </button>
         </div>
     </form>
+
+    <hr class="my-10 border-white/10">
+
+    <div class="mt-10">
+        <h3 class="text-lg font-bold text-white mb-4">パスワード変更</h3>
+        
+        <form action="{{ route('profile.update.password') }}" method="POST">
+            @csrf
+            @method('PATCH')
+
+            <div class="mb-4">
+                <label for="current_password" class="block text-white font-bold mb-2 text-sm">現在のパスワード</label>
+                <input type="password" name="current_password" id="current_password" class="w-full border-gray-300 rounded-md shadow-sm p-2 border" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="new_password" class="block text-white font-bold mb-2 text-sm">新しいパスワード</label>
+                <input type="password" name="new_password" id="new_password" class="w-full border-gray-300 rounded-md shadow-sm p-2 border" required>
+            </div>
+
+            <div class="mb-6">
+                <label for="new_password_confirmation" class="block text-white font-bold mb-2 text-sm">新しいパスワード（確認）</label>
+                <input type="password" name="new_password_confirmation" id="new_password_confirmation" class="w-full border-gray-300 rounded-md shadow-sm p-2 border" required>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <a href="{{ route('sounds.index') }}" class="text-gray-300 hover:text-white transition mr-4">キャンセル</a>
+                <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 transition text-sm">
+                    パスワードを更新
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection
