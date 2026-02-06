@@ -50,7 +50,7 @@ class SoundController extends Controller
     {
         $request->validate([
             'title' => 'required|max:100',
-            'sound_file' => 'required|file|mimes:mp3,wav,ogg|max:20480',
+            'sound_file' => 'required|file|mimes:mp3,wav,ogg|max:51200',
             'tags' => 'nullable|string', 
         ]);
 

@@ -43,7 +43,7 @@
                                 </label>
                                 <p class="pl-1">またはドラッグ&ドロップ</p>
                             </div>
-                            <p class="text-xs text-gray-500">MP3, WAV, M4A up to 10MB</p>
+                            <p class="text-xs text-gray-500">MP3, WAV, M4A up to 50MB</p>
                         </div>
                     </div>
                     {{-- 選択したファイル名を表示するための簡易スクリプト --}}
